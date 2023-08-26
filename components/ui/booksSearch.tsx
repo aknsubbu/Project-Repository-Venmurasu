@@ -48,19 +48,16 @@
       setInputValue(event.target.value);
     };
 
-const handleSearch = async () => {
-  try {
-    const value = `${selectedOption}:${inputValue}}`
-    const data = await fetch(
-      `https://openlibrary.org/api/books?bibkeys=${selectedOption}:${inputValue}&jscmd=details&format=json`
-    ).then((res) => res.json());
-
-    setFetchedData(data[value]);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
-
+   const handleSearch = async () => {
+            try {
+        const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=${selectedOption}:${inputValue}&jscmd=details&format=json`);
+        console.log(response.data);
+        setFetchedData(response.data[`${selectedOption}:${inputValue}`]); // Assuming response.data is an array or object
+      } catch (error) {
+        console.log(error);
+      }
+    };
+ 
 // Add this useEffect to see the updated fetchedData value
 useEffect(() => {
   console.log('Fetched Data:', fetchedData);
