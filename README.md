@@ -11,7 +11,7 @@ _Getting Started:_
 1. Clone the Repository:
 
    - Clone the repository from [GitHub Repository Link].
-   - Open your terminal and use the command: `git clone https://github.com/aknsubbu/project-repository-venmurasu`
+   - Open your terminal and use the command: `git clone https://github.com/aknsubbu/vpt-2023-aug-anandkumar-ns`
 
 2. Install Dependencies:
 
