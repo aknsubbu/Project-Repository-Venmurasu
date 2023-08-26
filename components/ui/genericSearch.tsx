@@ -38,7 +38,7 @@ const SearchPage = () => {
     try {
       const formattedInputValue = inputValue.replace(/\s+/g, '+');
       const response = await fetch(
-        `http://openlibrary.org/search.json?${selectedOption}=${formattedInputValue}`
+        `https://openlibrary.org/search.json?${selectedOption}=${formattedInputValue}`
       );
       const data = await response.json();
       setSearchResults(data.docs);
