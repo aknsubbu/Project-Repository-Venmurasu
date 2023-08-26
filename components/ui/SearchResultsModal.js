@@ -3,6 +3,7 @@ import { Modal, Table } from "react-bootstrap";
 import { Button } from "@/components/ui/button";
 
 const SearchResultsModal = ({ showModal, handleCloseModal, fetchedData }) => {
+  console.log(fetchedData);
   return (
     <Modal show={showModal} onHide={handleCloseModal} centered>
       <Modal.Header closeButton>

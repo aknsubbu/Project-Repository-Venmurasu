@@ -50,11 +50,12 @@
 
 const handleSearch = async () => {
   try {
+    const value = `${selectedOption}:${inputValue}}`
     const data = await fetch(
-      `http://openlibrary.org/${selectedOption}/${inputValue}.json`
+      `https://openlibrary.org/api/books?bibkeys=${selectedOption}:${inputValue}&jscmd=details&format=json`
     ).then((res) => res.json());
 
-    setFetchedData(data);
+    setFetchedData(data[value]);
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -145,46 +146,12 @@ useEffect(() => {
         </CardFooter>
       </Card>
 
-      <Modal show={showModal} onHide={handleCloseModal} centered>
-  <Modal.Header closeButton>
-    <Modal.Title>Search Results</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {fetchedData && fetchedData.length > 0 ? (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Authors</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fetchedData.map((book) => (
-            <tr key={book.key}>
-              <td>{book.title}</td>
-              <td>
-                {book.authors.map((author, index) => (
-                  <span key={index}>{author.name}</span>
-                ))}
-              </td>
-              <td>{book.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    ) : (
-      <div>No results found.</div>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleCloseModal}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
-
-
+ 
+<SearchResultsModal
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        fetchedData={fetchedData}
+      />
       </TabsContent>
     );
   };
