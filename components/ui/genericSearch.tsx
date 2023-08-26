@@ -50,6 +50,7 @@ const SearchPage = () => {
 
   return (
         <TabsContent value="general-search">
+            <div className='max-h-[900px]'>
       <Card>
         <CardHeader>
           <CardTitle>Generic Search</CardTitle>
@@ -59,7 +60,7 @@ const SearchPage = () => {
         </CardHeader>
         <CardContent className="space-y-2">
           <section className="py-4 overflow-hidden">
-            <div className="container px-4 mx-auto">
+            <div className="container px-4 mx-auto max-h-[900px]">
               <div className="p-6 bg-white border rounded-xl">
                 <div className="flex flex-wrap justify-between -m-2">
                   <div className="w-full sm:w-1/2 p-2">
@@ -97,9 +98,12 @@ const SearchPage = () => {
         <CardFooter>
           <Button onClick={handleSearch}>Search</Button>
         </CardFooter>
+        <div className="flex items-center justify-center w-full max-h-[900px] p-10">
         <SearchResultsModal searchResults={searchResults} />
+      </div>
         
       </Card>
+      </div>
     </TabsContent>
   );}
 

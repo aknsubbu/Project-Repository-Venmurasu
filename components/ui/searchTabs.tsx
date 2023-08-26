@@ -20,8 +20,8 @@ import {
 
 const SearchTabs=() => {
   return (
-    <Tabs defaultValue="books" className="w-4/5 p-5">
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs defaultValue="books" className="w-4/5 p-5 max-h-[1000px]">
+      <TabsList className="grid w-full grid-cols-2 max-h-[1000px]">
         <TabsTrigger value="books">Books</TabsTrigger>
         <TabsTrigger value="general-search">Generic Search</TabsTrigger>
       </TabsList>`
