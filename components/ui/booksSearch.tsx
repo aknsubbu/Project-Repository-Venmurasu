@@ -52,6 +52,7 @@ const handleSearch = async () => {
     ).then((res) => res.json());
 
     setFetchedData(data);
+    setShowModal(true); // Move this line inside the try block
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -134,52 +135,50 @@ useEffect(() => {
           </section>
         </CardContent>
         <CardFooter>
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Search Results</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {fetchedData && fetchedData.length > 0 ? (
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Authors</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fetchedData.map((book) => (
+                  <tr key={book.key}>
+                    <td>{book.title}</td>
+                    <td>
+                      {book.authors.map((author, index) => (
+                        <span key={index}>{author.name}</span>
+                      ))}
+                    </td>
+                    <td>{book.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <div>No results found.</div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
           <Button onClick={() => {
             handleSearch();
             setShowModal(true);
           }}>Search</Button>
         </CardFooter>
       </Card>
-
-      <Modal show={showModal} onHide={handleCloseModal} centered>
-  <Modal.Header closeButton>
-    <Modal.Title>Search Results</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {fetchedData && fetchedData.length > 0 ? (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Authors</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fetchedData.map((book) => (
-            <tr key={book.key}>
-              <td>{book.title}</td>
-              <td>
-                {book.authors.map((author, index) => (
-                  <span key={index}>{author.name}</span>
-                ))}
-              </td>
-              <td>{book.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    ) : (
-      <div>No results found.</div>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleCloseModal}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
-
 
     </TabsContent>
   );
