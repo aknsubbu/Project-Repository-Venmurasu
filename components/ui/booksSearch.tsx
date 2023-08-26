@@ -48,29 +48,23 @@
       setInputValue(event.target.value);
     };
 
-  const handleSearch = async () => {
-    
-    try {
-      
-      axios.get(`http://openlibrary.org/${selectedOption}/${inputValue}.json`).then((response) => {
-        console.log(response.data)
-        setFetchedData(response.data)
-      }).catch((error) => {
-        console.log(error)
-      })
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
+    const handleSearch = async () => {
+      const hvalue=`${selectedOption}:${inputValue}`  
+      try {
+        const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=${selectedOption}:${inputValue}&jscmd=details&format=json`);
+  
+        setFetchedData(response.data[`${selectedOption}:${inputValue}`]); // Assuming response.data is an array or object
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
   // Add this useEffect to see the updated fetchedData value
   useEffect(() => {
     console.log('Fetched Data:', fetchedData);
   }, [fetchedData]);
 
 
-  console.log(fetchedData && fetchedData.length > 0)
 
     return (
       <TabsContent value="books">
@@ -149,10 +143,12 @@
             }}>Search</Button>
           </CardFooter>
         </Card>
+        
         <SearchResultsModal
           showModal={showModal}
           handleCloseModal={handleCloseModal}
           fetchedData={fetchedData}
+          
         />
 
       </TabsContent>
