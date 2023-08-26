@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client'
+import React, { useState,useEffect } from 'react';
+import { Modal,Table } from 'react-bootstrap';
 import {
   Card,
   CardContent,
@@ -20,8 +22,10 @@ import BookCard from '@/components/ui/displayCard';
 
 interface Book {
   title: string;
-  author_name: string[];
-  cover_i: number;
+  authors: { name: string }[];
+  publisher: string[];
+  publish_date: string[];
+  description: string;
   key: string;
 }
 
@@ -29,6 +33,9 @@ const BooksSearch = () => {
   const [selectedOption, setSelectedOption] = useState('works');
   const [inputValue, setInputValue] = useState('');
   const [fetchedData, setFetchedData] = useState<Book[]>([]);
+    const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => setShowModal(false);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
@@ -38,17 +45,23 @@ const BooksSearch = () => {
     setInputValue(event.target.value);
   };
 
-  const handleSearch = async () => {
-    try {
-      const data = await fetch(
-        `http://openlibrary.org/${selectedOption}/${inputValue}.json`
-      ).then((res) => res.json());
-      console.log(data);
-      setFetchedData(data.docs);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+const handleSearch = async () => {
+  try {
+    const data = await fetch(
+      `http://openlibrary.org/${selectedOption}/${inputValue}.json`
+    ).then((res) => res.json());
+
+    setFetchedData(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+// Add this useEffect to see the updated fetchedData value
+useEffect(() => {
+  console.log('Fetched Data:', fetchedData);
+}, [fetchedData]);
+
 
   return (
     <TabsContent value="books">
@@ -121,16 +134,53 @@ const BooksSearch = () => {
           </section>
         </CardContent>
         <CardFooter>
-          <Button onClick={handleSearch}>Search</Button>
+          <Button onClick={() => {
+            handleSearch();
+            setShowModal(true);
+          }}>Search</Button>
         </CardFooter>
       </Card>
-      {fetchedData && fetchedData.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 mt-4">
+
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+  <Modal.Header closeButton>
+    <Modal.Title>Search Results</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {fetchedData && fetchedData.length > 0 ? (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
           {fetchedData.map((book) => (
-            <BookCard key={book.key} book={book} />
+            <tr key={book.key}>
+              <td>{book.title}</td>
+              <td>
+                {book.authors.map((author, index) => (
+                  <span key={index}>{author.name}</span>
+                ))}
+              </td>
+              <td>{book.description}</td>
+            </tr>
           ))}
-        </div>
-      )}
+        </tbody>
+      </Table>
+    ) : (
+      <div>No results found.</div>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleCloseModal}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+
     </TabsContent>
   );
 };
